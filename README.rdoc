@@ -5,13 +5,18 @@ application up and running.
 
 Things you may want to cover:
 
-* Ruby version
+* Ruby version 2.3.6
 
 * System dependencies
 
 * Configuration
 
+  config.web_console.development_only = false
+  in test.rb
+
 * Database creation
+
+  backport_pg_10_support_to_rails_4.rb
 
 * Database initialization
 
