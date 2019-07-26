@@ -5,13 +5,15 @@ application up and running.
 
 Things you may want to cover:
 
+> backport_pg_10_support_to_rails_4.rb`
+
+> config.web_console.development_only = false
+
 * Ruby version 2.3.6
 
 * System dependencies
 
 * Configuration
-
->`config.web_console.development_only = false`
 
 in test.rb
 
@@ -21,7 +23,6 @@ in test.rb
 
 * How to run the test suite
 
->`backport_pg_10_support_to_rails_4.rb`
 
 * Services (job queues, cache servers, search engines, etc.)
 
