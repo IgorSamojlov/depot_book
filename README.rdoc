@@ -5,9 +5,9 @@ application up and running.
 
 Things you may want to cover:
 
-> backport_pg_10_support_to_rails_4.rb`
+<tt>backport_pg_10_support_to_rails_4.rb</tt>
 
-> config.web_console.development_only = false
+<tt>config.web_console.development_only = false</tt>
 
 * Ruby version 2.3.6
 
