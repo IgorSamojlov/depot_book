@@ -11,16 +11,17 @@ Things you may want to cover:
 
 * Configuration
 
-  config.web_console.development_only = false
+  'config.web_console.development_only = false'
+
   in test.rb
 
 * Database creation
 
-  backport_pg_10_support_to_rails_4.rb
-
 * Database initialization
 
 * How to run the test suite
+
+  'backport_pg_10_support_to_rails_4.rb'
 
 * Services (job queues, cache servers, search engines, etc.)
 
