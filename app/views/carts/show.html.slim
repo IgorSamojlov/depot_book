@@ -1,0 +1,23 @@
+p id="notice"
+  = notice
+
+h2 Your Cart
+
+table
+  - @cart.line_items.each do |item|
+    tr
+      td = item.quantity
+        |&times;
+      td = item.product.title
+      td calss='item_price' = number_to_currency(item.total_price)
+
+  tr class='total_line'
+    td colspan='2' Total
+    td class='total_cell' = number_to_currency(@cart.total_price)
+
+=button_to 'Empty cart', @cart, method: :delete,
+  data: { confirm: 'Are you shure?' }
+
+= link_to 'Edit', edit_cart_path(@cart)
+||
+= link_to 'Back', carts_path
