@@ -9,13 +9,15 @@ table
       td = item.quantity
         |&times;
       td = item.product.title
-      td calss='item_price' = number_to_currency(item.total_price)
+      td calss='item_price' = number_to_currency(item.price)
+      td = button_to 'Delete this position', item, method: :delete,
+        data: { confirm: 'Are you shure' }
 
   tr class='total_line'
     td colspan='2' Total
     td class='total_cell' = number_to_currency(@cart.total_price)
 
-=button_to 'Empty cart', @cart, method: :delete,
+= button_to 'Empty cart', @cart, method: :delete,
   data: { confirm: 'Are you shure?' }
 
 = link_to 'Edit', edit_cart_path(@cart)
