@@ -1,5 +1,7 @@
 class StoreController < ApplicationController
-  before_action :how_much_get_index, only: [:index]
+  include CurrentCart
+
+  before_action :how_much_get_index, :set_cart, only: %i(index)
 
   def index
     @products = Product.order(:title)

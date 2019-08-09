@@ -12,6 +12,8 @@ body class=controller.controller_name
     = @page_title || "Pragmatic Bookshelf"
   div id='columns'
     div id='side'
+      div id='cart'
+        = render @cart
       ul
         li
           a href='http://www....' Home

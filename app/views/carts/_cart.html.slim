@@ -1,0 +1,16 @@
+h2 Your Cart
+
+table
+  tr class='total_line'
+    = render(cart.line_items)
+
+  tr class='total_line'
+    td colspan='2' Total
+    td class='total_cell' = number_to_currency(cart.total_price)
+
+= button_to 'Empty cart', cart, method: :delete,
+  data: { confirm: 'Are you shure?' }
+
+= link_to 'Edit', edit_cart_path(@cart)
+||
+= link_to 'Back', carts_path

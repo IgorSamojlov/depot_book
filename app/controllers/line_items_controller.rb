@@ -24,7 +24,8 @@ class LineItemsController < ApplicationController
     respond_to do |format|
       if @line_item.save
         session[:store_index_counter] = 0
-        format.html { redirect_to @line_item.cart }
+        format.html { redirect_to store_url }
+        format.js
         format.json { render :show, status: :created, location: @line_item }
       else
         format.html { render :new }
