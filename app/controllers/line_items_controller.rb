@@ -25,7 +25,7 @@ class LineItemsController < ApplicationController
       if @line_item.save
         session[:store_index_counter] = 0
         format.html { redirect_to store_url }
-        format.js
+        format.js { @current_item = @line_item }
         format.json { render :show, status: :created, location: @line_item }
       else
         format.html { render :new }
@@ -47,10 +47,19 @@ class LineItemsController < ApplicationController
   end
 
   def destroy
-    @line_item.destroy
-    respond_to do |format|
-      format.html { redirect_to @cart, notice: 'Line item was successfully destroyed.' }
-      format.json { head :no_content }
+    if @line_item.quantity == 1
+      @line_item.destroy
+      respond_to do |format|
+        # Need ti check redirect
+        format.html { redirect_to store_url, notice: 'Line item was successfully destroyed.' }
+        format.json { head :no_content }
+      end
+    else
+      @line_item.quantity -= 1
+      @line_item.save
+      respond_to do |format|
+        format.js { @current_item = @line_item }
+      end
     end
   end
 

@@ -12,8 +12,10 @@ body class=controller.controller_name
     = @page_title || "Pragmatic Bookshelf"
   div id='columns'
     div id='side'
-      div id='cart'
-        = render @cart
+      -if @cart
+        div id='cart'
+          = hidden_div_if(@cart.line_items.empty?, id: 'cart') do
+              =render @cart
       ul
         li
           a href='http://www....' Home
