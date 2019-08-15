@@ -6,6 +6,7 @@ class Product < ActiveRecord::Base
     message: 'URL должен указывать на изображение формата GIF, JPG или PNG.'
 }
   has_many :line_items
+  has_many :orders, through: :line_items
 
   before_destroy :ensure_notreferenced_by_any_line_item
 

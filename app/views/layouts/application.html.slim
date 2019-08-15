@@ -7,15 +7,14 @@ head
   = csrf_meta_tags
 
 body class=controller.controller_name
-  div id='banner'
-    =image_tag('logo.png')
+  #banner
+    = image_tag('logo.png')
     = @page_title || "Pragmatic Bookshelf"
-  div id='columns'
-    div id='side'
-      -if @cart
-        div id='cart'
-          = hidden_div_if(@cart.line_items.empty?, id: 'cart') do
-              =render @cart
+  #columns
+    #side
+      - if @cart
+        = hidden_div_if @cart.line_items.empty?, id: 'cart' do
+          = render @cart
       ul
         li
           a href='http://www....' Home
