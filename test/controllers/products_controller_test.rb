@@ -1,15 +1,15 @@
   require 'test_helper'
 
 class ProductsControllerTest < ActionController::TestCase
-  # setup do
-  #   @product = products(:ruby)
-  #   @new_products_params = {
-  #     title: 'New title',
-  #     description: 'New description',
-  #     image_url: 'image.jpg',
-  #     price: 1.99
-  #   }
-  # end
+  setup do
+    @product = products(:ruby)
+    @new_products_params = {
+      title: 'New title',
+      description: 'New description',
+      image_url: 'image.jpg',
+      price: 1.99
+    }
+  end
 
   test "should get index" do
     get :index

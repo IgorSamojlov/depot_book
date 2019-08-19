@@ -1,14 +1,15 @@
--if notice
+- if notice
   p id="notice"
     = notice
 div align='right'
   h4 = pluralize(@index_counter, 'mach')
 
 h1 Your Pragmatic Catalog
--cache ['store', Product.latest] do
 
-  -@products.each do |product|
-    -cache ['entry', product] do
+- cache ['store', Product.latest] do
+
+  - @products.each do |product|
+    - cache ['entry', product] do
       div class="entry"
         = image_tag(product.image_url)
         h3
@@ -17,5 +18,5 @@ h1 Your Pragmatic Catalog
 
         div class="price_line"
           span class="price" = number_to_currency product.price
-          =button_to 'Add to Cart', line_items_path(product_id: product),
+          = button_to 'Add to Cart', line_items_path(product_id: product),
             remote: true
