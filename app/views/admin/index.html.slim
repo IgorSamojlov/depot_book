@@ -1,0 +1,9 @@
+h1
+  | Добрый день
+
+| Сейчас
+p
+  = Time.now
+| У нас имеется
+p
+  = pluralize(@total_orders, "order")
