@@ -59,7 +59,7 @@ class UsersControllerTest < ActionController::TestCase
 
   test 'should update when old password doesnt have' do
     patch :update, id: @user, user: { name: 'name1', password: '1111',
-      password_confirmation: '1111', password_check: @user.password }
+      password_confirmation: '1111', password_check: '' }
     assert_redirected_to edit_user_path
   end
 
