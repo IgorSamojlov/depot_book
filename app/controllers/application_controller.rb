@@ -5,6 +5,7 @@ class ApplicationController < ActionController::Base
 
   protected
     def authorize
+      flash[:alert] = 'Вы зарегестрируетесть, вы первый' if 0 == User.count
       unless User.find_by(id: session[:user_id])
         redirect_to login_url, notice: 'Пожалуста зарегестрируйся'
       end

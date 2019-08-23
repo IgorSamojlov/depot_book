@@ -31,8 +31,6 @@ class UsersController < ApplicationController
   end
 
   def update
-    if @user.authenticate(params[:user][:password_check])
-
       respond_to do |format|
         if @user.update(user_params)
           format.html { redirect_to users_url,
@@ -43,18 +41,14 @@ class UsersController < ApplicationController
           format.json { render json: @user.errors, status: :unprocessable_entity }
         end
       end
-    else
-      flash[:notice] = 'Введите пароль'
-      redirect_to edit_user_path @user
-    end
   end
 
   def destroy
     begin
       @user.destroy
       falsh[:notice] = "Пользователь #{@user.name} удален"
-    rescue StandartError => e
-      falsh[:notice] = e.message
+    rescue StandardError => e
+      flash[:notice] = e.message
     end
       respond_to do |format|
         format.html { redirect_to users_url, notice: 'User was successfully destroyed.' }

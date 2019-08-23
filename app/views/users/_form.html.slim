@@ -16,10 +16,6 @@
     legend Введите сведенья о пользователе
 
     .field
-      = f.label :password_check
-      = f.password_field :password_check
-
-    .field
       = f.label :name
       = f.text_field :name
 
@@ -30,6 +26,12 @@
     .field
       = f.label :password_confirmation
       = f.password_field :password_confirmation
+
+    hr1
+
+    .field
+      = f.label :password_check
+      = f.password_field :password_check
 
     .actions
       = f.submit
