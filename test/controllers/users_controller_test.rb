@@ -34,51 +34,67 @@ class UsersControllerTest < ActionController::TestCase
   end
 
   test "should update user when password dont change" do
-    patch :update, id: @user, user: { name: @user.name, password: '',
-      password_confirmation: '' }
-    assert_redirected_to users_path
+    patch :update, id: @user, user: { name: 'name', password: '',
+    password_confirmation: '' }
+
+    @user.reload
+    assert_equal @user.name, 'name'
   end
 
   test 'should update user when password dont change but validation' do
     patch :update, id: @user, user: { name: '123456789012', password: '',
       password_confirmation: '' }
-    assert_redirected_to edit_user_path
+
+    @user.reload
+    assert_equal @user.name, 'sam'
   end
 
   test 'should update when validation done and old password done' do
-    patch :update, id: @user, user: { name: 'name1', password: 'new_sec',
-      password_confirmation: 'new_sec', password_check: @user.password }
-    assert_redirected_to user_path
+    patch :update, id: @user, user: { name: 'name1', password: 'nw_s',
+      password_confirmation: 'nw_s', password_check: 'secret' }
+
+    @user.reload
+    assert_equal @user.name, 'name1'
   end
 
-  test 'should update when validatino not valid' do
+  test 'should update when validatino so bad but password done' do
     patch :update, id: @user, user: { name: 'name1234567890', password: '11111',
-      password_confirmation: '11111', password_check: @user.password }
-    assert_redirected_to edit_user_path
+      password_confirmation: '11111', password_check: 'secret' }
+
+    @user.reload
+    assert_equal @user.name, 'sam'
   end
 
   test 'should update when old password doesnt have' do
-    patch :update, id: @user, user: { name: 'name1', password: '1111',
-      password_confirmation: '1111', password_check: '' }
-    assert_redirected_to edit_user_path
+    patch :update, id: @user, user: { name: 'name', password: '11',
+      password_confirmation: '11', password_check: '' }
+
+    @user.reload
+    assert_equal @user.name, 'sam'
   end
 
   test 'should update when old password bad' do
     patch :update, id: @user, user: { name: 'name1', password: '1111',
       password_confirmation: '1111', password_check: 'bad' }
-      assert_redirected_to edit_user_path
+
+    @user.reload
+    assert_equal @user.name, 'sam'
   end
 
   test 'should update when password bad valid' do
     patch :update, id: @user, user: { name: 'name1', password: '123456789011',
-      password_confirmation: '123456789011', password_check: @user.password }
-    assert_redirected_to edit_user_path
+      password_confirmation: '123456789011', password_check: 'secret' }
+
+    @user.reload
+    assert_equal @user.name, 'sam'
   end
 
   test 'should update when password 111 and 333' do
     patch :update, id: @user, user: { name: 'name1', password: '111',
-      password_confirmation: '333', password_check: @user.password }
-    assert_redirected_to edit_user_path
+      password_confirmation: '333', password_check: 'secret' }
+
+    @user.reload
+    assert_equal @user.name, 'sam'
   end
 
   test "should destroy user" do

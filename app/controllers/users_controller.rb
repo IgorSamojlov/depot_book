@@ -30,9 +30,19 @@ class UsersController < ApplicationController
     end
   end
 
+  def condition
+    if params[:user][:password].empty?
+      return true
+    elsif @user.authenticate(params[:user][:password_check])
+      return true
+    else
+      return false
+    end
+  end
+
   def update
       respond_to do |format|
-        if @user.update(user_params)
+        if condition && @user.update(user_params)
           format.html { redirect_to users_url,
           notice: "User with name #{@user.name} updated." }
           format.json { render :show, status: :ok, location: @user }
@@ -46,7 +56,7 @@ class UsersController < ApplicationController
   def destroy
     begin
       @user.destroy
-      falsh[:notice] = "Пользователь #{@user.name} удален"
+      flash[:notice] = "Пользователь #{@user.name} удален"
     rescue StandardError => e
       flash[:notice] = e.message
     end

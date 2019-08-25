@@ -1,5 +1,5 @@
 class User < ActiveRecord::Base
-  validates :name, presence: true, uniqueness: true, length: {maximum: 10}
+  validates :name, presence: true, uniqueness: true, length: {maximum: 5}
   validates :password, length: {maximum: 6}
   has_secure_password
 
