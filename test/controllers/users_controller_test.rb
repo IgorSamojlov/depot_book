@@ -33,52 +33,63 @@ class UsersControllerTest < ActionController::TestCase
     assert_response :success
   end
 
-  test "should update user when password dont change" do
+  test "должен обновляться, новый пароль не введен" do
     patch :update, id: @user, user: { name: 'name', password: '',
     password_confirmation: '' }
 
     @user.reload
     assert_equal @user.name, 'name'
+    assert_equal @user.authenticate('secret'), @user
   end
 
-  test 'should update user when password dont change but validation' do
+  test 'не должен обновляться, имя не проходит валидацию' do
     patch :update, id: @user, user: { name: '123456789012', password: '',
       password_confirmation: '' }
 
     @user.reload
     assert_equal @user.name, 'sam'
+    assert_equal @user.authenticate('secret'), @user
+    assert_tag :li, content: 'Name is too long (maximum is 5 characters)'
   end
 
-  test 'should update when validation done and old password done' do
+  test 'должен обнавляться, все введено верно' do
     patch :update, id: @user, user: { name: 'name1', password: 'nw_s',
       password_confirmation: 'nw_s', password_check: 'secret' }
 
     @user.reload
     assert_equal @user.name, 'name1'
+    assert_equal @user.authenticate('nw_s'), @user
+    assert_redirected_to users_path
   end
 
-  test 'should update when validatino so bad but password done' do
-    patch :update, id: @user, user: { name: 'name1234567890', password: '11111',
-      password_confirmation: '11111', password_check: 'secret' }
+  test 'не должен обнавляться из-за валидаций' do
+    patch :update, id: @user, user: {name: 'name1234567890', password: '123456789012',
+      password_confirmation: '123456789012', password_check: 'secret' }
 
     @user.reload
     assert_equal @user.name, 'sam'
+    assert_tag :li, content: 'Name is too long (maximum is 5 characters)'
+    assert_tag :li, content: 'Password is too long (maximum is 6 characters)'
   end
 
-  test 'should update when old password doesnt have' do
+  test 'не должен обнавляться без старого пароля' do
     patch :update, id: @user, user: { name: 'name', password: '11',
-      password_confirmation: '11', password_check: '' }
+      password_confirmation: '11'}
 
     @user.reload
     assert_equal @user.name, 'sam'
+    assert_tag :li,
+      content: 'Old password can`t be blank or doesn`t match Password'
   end
 
-  test 'should update when old password bad' do
+  test 'не должен обнавляться, старый пароль указан не верно ' do
     patch :update, id: @user, user: { name: 'name1', password: '1111',
       password_confirmation: '1111', password_check: 'bad' }
 
     @user.reload
     assert_equal @user.name, 'sam'
+    assert_tag :li,
+      content: 'Old password can`t be blank or doesn`t match Password'
   end
 
   test 'should update when password bad valid' do
@@ -87,6 +98,7 @@ class UsersControllerTest < ActionController::TestCase
 
     @user.reload
     assert_equal @user.name, 'sam'
+    assert_tag :li, content: 'Password is too long (maximum is 6 characters)'
   end
 
   test 'should update when password 111 and 333' do
@@ -95,6 +107,8 @@ class UsersControllerTest < ActionController::TestCase
 
     @user.reload
     assert_equal @user.name, 'sam'
+    assert_tag :li, content: "Password confirmation doesn&#39;t match Password"
+    # странное поведение с апострофом
   end
 
   test "should destroy user" do

@@ -30,19 +30,9 @@ class UsersController < ApplicationController
     end
   end
 
-  def condition
-    if params[:user][:password].empty?
-      return true
-    elsif @user.authenticate(params[:user][:password_check])
-      return true
-    else
-      return false
-    end
-  end
-
   def update
       respond_to do |format|
-        if condition && @user.update(user_params)
+        if check_and_update
           format.html { redirect_to users_url,
           notice: "User with name #{@user.name} updated." }
           format.json { render :show, status: :ok, location: @user }
@@ -57,16 +47,31 @@ class UsersController < ApplicationController
     begin
       @user.destroy
       flash[:notice] = "Пользователь #{@user.name} удален"
-    rescue StandardError => e
-      flash[:notice] = e.message
+      rescue StandardError => e
+        flash[:notice] = e.message
     end
-      respond_to do |format|
-        format.html { redirect_to users_url, notice: 'User was successfully destroyed.' }
-        format.json { head :no_content }
+    respond_to do |format|
+      format.html { redirect_to users_url }
+      format.json { head :no_content }
     end
   end
 
   private
+
+    def check_and_update
+      if @user.authenticate(params[:user][:password_check])
+        return @user.update(user_params)
+      elsif params[:user][:password].empty?
+        return @user.update(user_params)
+      else
+        User.transaction do
+          @user.update(user_params)
+          raise ActiveRecord::Rollback
+        end
+        @user.errors[:old_password] = 'can`t be blank or doesn`t match Password'
+        return false
+      end
+    end
 
     def set_user
       @user = User.find(params[:id])
