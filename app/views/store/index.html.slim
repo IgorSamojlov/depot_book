@@ -2,21 +2,26 @@
   p id="notice"
     = notice
 div align='right'
-  h4 = pluralize(@index_counter, 'mach')
+  h4 = pluralize(how_much_get_index, 'mach')
 
-h1 Your Pragmatic Catalog
+h1 = t('.title_html')
 
-- cache ['store', Product.latest] do
+- cache [params[:get_locale], Product.latest] do
 
   - @products.each do |product|
     - cache ['entry', product] do
-      div class="entry"
+      .entry
         = image_tag(product.image_url)
         h3
           = product.title
         = sanitize(product.description)
 
-        div class="price_line"
-          span class="price" = number_to_currency product.price
-          = button_to 'Add to Cart', line_items_path(product_id: product),
+        h4
+          |From Location ||
+          = product.locale
+
+        .price_line
+          span.price = number_to_currency product.price
+          = button_to t('.add_html'), line_items_path(product_id: product),
             remote: true
+

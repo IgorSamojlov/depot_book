@@ -12,6 +12,7 @@ table
           dt = product.title
           dd = truncate(strip_tags(product.description), length: 80)
       td = product.price
+      td = product.locale
 
       td class='list_actions'
         = link_to 'Show', product

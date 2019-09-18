@@ -2,28 +2,38 @@ doctype html
 html
 head
   title Depot
+  = console
   = stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': true
   = javascript_include_tag 'application', 'data-turbolinks-track': true
   = csrf_meta_tags
 
 body class=controller.controller_name
   #banner
+
+    = form_tag store_path, class: 'locale', method: :get do
+      = select_tag 'set_locale', options_for_select(LANGUAGES, I18n.locale.to_s), onchange: 'this.form.submit()'
+      = submit_tag 'submit'
+      = javascript_tag "$('.locale input').hide()"
+
     = image_tag('logo.png')
-    = @page_title || "Pragmatic Bookshelf"
+    = @page_title || t('.title')
   #columns
     #side
+      = form_tag store_path, class: 'prod_locale', method: :get do
+        = select_tag 'get_locale', options_for_select(LANGUAGES, params[:get_locale]), onchange: 'this.form.submit()'
+
       - if @cart
         = hidden_div_if @cart.line_items.empty?, id: 'cart' do
           = render @cart
       ul
         li
-          a href='http://www....' Home
+          a href='http://www....' = t('.home')
         li
-          a href='http://www..../faq' Questions
+          a href='http://www..../faq' = t('.questions')
         li
-          a href='http://www..../news' News
+          a href='http://www..../news' = t('.news')
         li
-          a href='http://www..../contact' Contact
+          a href='http://www..../contact' = t('.contact')
       - if session[:user_id]
         ul
           li = link_to 'Orders', orders_path

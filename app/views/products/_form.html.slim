@@ -10,21 +10,25 @@
         - @product.errors.full_messages.each do |message|
           li = message
 
-  div class="field"
+  .field
     = f.label :title
     = f.text_field :title
 
-  div class="field"
+  .field
     = f.label :description
     = f.text_area :description, rows: 6
 
-  div class="field"
+  .field
     = f.label :image_url
     = f.text_field :image_url
 
-  div class="field"
+  .field
     = f.label :price
     = f.text_field :price
+
+  .field
+    = f.label :locale
+    = f.select :locale, LANGUAGES
 
   div class="actions"
     = f.submit

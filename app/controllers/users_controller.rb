@@ -31,16 +31,15 @@ class UsersController < ApplicationController
   end
 
   def update
-      respond_to do |format|
-        if check_and_update
-          format.html { redirect_to users_url,
-          notice: "User with name #{@user.name} updated." }
-          format.json { render :show, status: :ok, location: @user }
-        else
-          format.html { render :edit }
-          format.json { render json: @user.errors, status: :unprocessable_entity }
-        end
+    respond_to do |format|
+      if check_and_update
+        format.html { redirect_to users_url, notice: "User with name #{@user.name} updated." }
+        format.json { render :show, status: :ok, location: @user }
+      else
+        format.html { render :edit }
+        format.json { render json: @user.errors, status: :unprocessable_entity }
       end
+    end
   end
 
   def destroy
@@ -58,27 +57,23 @@ class UsersController < ApplicationController
 
   private
 
-    def check_and_update
-      if @user.authenticate(params[:user][:password_check])
-        return @user.update(user_params)
-      elsif params[:user][:password].empty?
-        return @user.update(user_params)
-      else
-        User.transaction do
-          @user.update(user_params)
-          raise ActiveRecord::Rollback
-        end
-        @user.errors[:old_password] = 'can`t be blank or doesn`t match Password'
-        return false
-      end
-    end
+  def check_and_update
+    have_pass = user_params[:password].present? || user_params[:password_confirmation].present?
+    @user_for_check = @user.dup
+    @user.assign_attributes user_params
+    user_valid = @user.valid?
 
-    def set_user
-      @user = User.find(params[:id])
+    if have_pass ? @user_for_check.authenticate(params[:user][:password_check]) && user_valid : user_valid
+      @user.save
     end
+  end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def user_params
-      params.require(:user).permit(:name, :password, :password_confirmation)
-    end
+  def set_user
+    @user = User.find(params[:id])
+  end
+
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def user_params
+    params.require(:user).permit(:name, :password, :password_confirmation)
+  end
 end

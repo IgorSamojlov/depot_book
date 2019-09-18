@@ -3,6 +3,8 @@ class User < ActiveRecord::Base
   validates :password, length: {maximum: 6}
   has_secure_password
 
+  include Skope
+
   after_destroy :ensure_an_admin_remains
 
   def ensure_an_admin_remains
